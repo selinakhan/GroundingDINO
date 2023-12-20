@@ -100,7 +100,13 @@ def predict(
 def annotate(image_source: np.ndarray, boxes: torch.Tensor, logits: torch.Tensor, phrases: List[str]) -> np.ndarray:
     h, w, _ = image_source.shape
     boxes = boxes * torch.Tensor([w, h, w, h])
+
+    # add 40 white pixels padding to the height of the image and correct for the boxes
+    image_source = np.pad(image_source, ((50, 0), (0, 50), (0, 0)), mode='constant', constant_values=255)
+    boxes = boxes + torch.Tensor([0, 50, 0, 0])
+
     xyxy = box_convert(boxes=boxes, in_fmt="cxcywh", out_fmt="xyxy").numpy()
+
     detections = sv.Detections(xyxy=xyxy)
 
     labels = [
