@@ -244,6 +244,8 @@ def generate_masks_with_special_tokens_and_transfer_map(tokenized, special_token
         torch.eye(num_token, device=input_ids.device).bool().unsqueeze(0).repeat(bs, 1, 1)
     )
     position_ids = torch.zeros((bs, num_token), device=input_ids.device)
+    
+    
     cate_to_token_mask_list = [[] for _ in range(bs)]
     previous_col = 0
     for i in range(idxs.shape[0]):
@@ -261,13 +263,13 @@ def generate_masks_with_special_tokens_and_transfer_map(tokenized, special_token
             cate_to_token_mask_list[row].append(c2t_maski)
         previous_col = col
 
-    cate_to_token_mask_list = [
-        torch.stack(cate_to_token_mask_listi, dim=0)
-        for cate_to_token_mask_listi in cate_to_token_mask_list
-    ]
+    # cate_to_token_mask_list = [
+    #     torch.stack(cate_to_token_mask_listi, dim=0)
+    #     for cate_to_token_mask_listi in cate_to_token_mask_list
+    # ]
 
     # # padding mask
     # padding_mask = tokenized['attention_mask']
     # attention_mask = attention_mask & padding_mask.unsqueeze(1).bool() & padding_mask.unsqueeze(2).bool()
 
-    return attention_mask, position_ids.to(torch.long), cate_to_token_mask_list
+    return attention_mask, position_ids.to(torch.long)#, cate_to_token_mask_list

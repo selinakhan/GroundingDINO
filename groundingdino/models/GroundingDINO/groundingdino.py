@@ -251,7 +251,7 @@ class GroundingDINO(nn.Module):
         (
             text_self_attention_masks,
             position_ids,
-            cate_to_token_mask_list,
+            #cate_to_token_mask_list,
         ) = generate_masks_with_special_tokens_and_transfer_map(
             tokenized, self.specical_tokens, self.tokenizer
         )
